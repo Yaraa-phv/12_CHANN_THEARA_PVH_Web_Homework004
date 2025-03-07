@@ -1,16 +1,99 @@
 import { Plus } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
+import CardComponent from "./CardComponent";
 
 export default function AddNewProjectComponent() {
+  const [newTask, setNewTask] = useState({
+    formData: {
+      projectName: "",
+      dueDate: "",
+      progress: "",
+      description: "",
+    },
+    cards: [],
+  });
+
+
+  const [errors, setErrors] = useState({});
+  const [isFormSubmitted, setIsFormSubmitted] = useState(true);
+
+  const validateInput = () => {
+    const err = {};
+
+    if (!newTask.formData.projectName.trim()) {
+      err.projectName = "Please input Project Name!";
+    }
+
+    if (!newTask.formData.dueDate.trim()) {
+      err.dueDate = "Please input Due Date!";
+    } else {
+      const selectDate = new Date(newTask.formData.dueDate);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (selectDate < today) {
+        err.dueDate = "Please don't input the past date!";
+      }
+    }
+
+    if (!newTask.formData.progress) {
+      err.progress = "Please select a valid progress value!";
+    }
+
+    // if (!newTask.formData.description.trim()) {
+    //   err.description = "Please input any description!";
+    // }
+
+    setErrors(err);
+    return Object.keys(err).length === 0; // If no errors, return true
+  };
+
+  const handleUserInput = (e) => {
+    const { name, value } = e.target;
+
+    if (!name === newTask.formData.description) {
+      return name = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio ipsum ipsa unde ut aperiam quasi iusto inventore sunt voluptate qui! Tempore a ea hic, fugit distinctio velit quia consequatur corrupti!";
+    }
+    
+    setNewTask((prevNewTask) => ({
+      ...prevNewTask,
+      formData: {
+        ...prevNewTask.formData,
+        [name]: value,
+      }
+    })
+    );
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleBtnClcik(e);
+  };
+
+  const handleBtnClcik = (e) => {
+    e.preventDefault();
+    if (validateInput()) {
+      setNewTask((prevNewTask) => ({
+        ...prevNewTask,
+        formData: {
+          projectName: "",
+          dueDate: "",
+          progress: "",
+          description: "",
+        },
+      }));
+      console.log("Input:", newTask);
+    }
+  }
+
   return (
     <div>
       <button
         data-modal-target="crud-modal"
         data-modal-toggle="crud-modal"
-        className=" text-white bg-custom-sky-blue hover:bg-custom-sky-blue-500 focus:ring-3 focus:outline-none focus:ring-custom-sky-blue-500  font-medium rounded-lg text-sm px-3 py-2.5 text-center dark:bg-custom-sky-blue-500 dark:hover:bg-custom-sky-blue-500  dark:focus:ring-custom-sky-blue-500  flex items-center gap-2"
+        className="text-white bg-custom-sky-blue hover:bg-custom-sky-blue-500 focus:ring-3 focus:outline-none focus:ring-custom-sky-blue-500 font-medium rounded-lg text-sm px-3 py-2.5 text-center dark:bg-custom-sky-blue-500 dark:hover:bg-custom-sky-blue-500 dark:focus:ring-custom-sky-blue-500 flex items-center gap-2"
         type="button"
       >
-        <Plus size={22} /> <span className="text-base">New Project</span>
+        <Plus size={18} /> <span className="text-xs">New Project</span>
       </button>
 
       <div
@@ -48,7 +131,7 @@ export default function AddNewProjectComponent() {
                 <span className="sr-only">Close modal</span>
               </button>
             </div>
-            <form className="p-4 md:p-5">
+            <form className="p-4 md:p-5" onSubmit={handleSubmit}>
               <div className="grid gap-4 mb-4 grid-cols-2">
                 <div className="col-span-2">
                   <label
@@ -61,10 +144,12 @@ export default function AddNewProjectComponent() {
                     type="text"
                     name="projectName"
                     id="projectName"
+                    value={newTask.formData.projectName}
+                    onChange={handleUserInput}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                     placeholder="Type Project Name"
-                    required
                   />
+                  {errors.projectName && <p className="text-red-500">{errors.projectName}</p>}
                 </div>
 
                 <div className="col-span-2">
@@ -78,9 +163,11 @@ export default function AddNewProjectComponent() {
                     type="date"
                     name="dueDate"
                     id="dueDate"
+                    value={newTask.formData.dueDate}
+                    onChange={handleUserInput}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                    required
                   />
+                  {errors.dueDate && <p className="text-red-500">{errors.dueDate}</p>}
                 </div>
 
                 <div className="col-span-2">
@@ -92,15 +179,20 @@ export default function AddNewProjectComponent() {
                   </label>
                   <select
                     id="progress"
+                    name="progress"
+                    value={newTask.formData.progress}
+                    onChange={handleUserInput}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   >
-                    <option defaultValue="">Select Progress</option>
+                    <option value="">Select Progress</option>
                     <option value="100">100</option>
                     <option value="75">75</option>
                     <option value="50">50</option>
                     <option value="25">25</option>
                   </select>
+                  {errors.progress && <p className="text-red-500">{errors.progress}</p>}
                 </div>
+
                 <div className="col-span-2">
                   <label
                     htmlFor="description"
@@ -110,16 +202,22 @@ export default function AddNewProjectComponent() {
                   </label>
                   <textarea
                     id="description"
+                    name="description"
+                    value={newTask.formData.description}
+                    onChange={handleUserInput}
                     rows="4"
                     className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                     placeholder="Write product description here"
                   ></textarea>
+                  {errors.description && <p className="text-red-500">{errors.description}</p>}
                 </div>
               </div>
-              <div className="text-right">
+
+              <div className="flex justify-end gap-4 mt-4">
                 <button
                   type="submit"
-                  className="text-white inline-flex items-center bg-custom-sky-blue hover:bg-custom-sky-blue-500 focus:ring-4 focus:outline-none focus:ring-custom-sky-blue-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-custom-sky-blue-500 dark:hover:bg-custom-sky-blue-500 dark:focus:ring-custom-sky-blue-500"
+                  onClick={handleBtnClcik}
+                  className="text-white bg-custom-sky-blue hover:bg-custom-sky-blue-500 focus:ring-3 focus:outline-none focus:ring-custom-sky-blue-500 font-medium rounded-lg text-sm px-3 py-2.5 text-center dark:bg-custom-sky-blue-500 dark:hover:bg-custom-sky-blue-500 dark:focus:ring-custom-sky-blue-500"
                 >
                   Create
                 </button>
@@ -128,6 +226,15 @@ export default function AddNewProjectComponent() {
           </div>
         </div>
       </div>
+
+      {isFormSubmitted && newTask.cards.length === 0 && (
+        <div className="mt-4">
+          {newTask.cards.map((project, index) => (
+            <CardComponent key={index} project={project} />
+          ))}
+        </div>
+      )}
     </div>
+    
   );
 }

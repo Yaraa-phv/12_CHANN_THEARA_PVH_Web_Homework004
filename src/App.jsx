@@ -1,36 +1,59 @@
 import "./App.css";
-import AssignmentsComponent from "./components/AssignmentsComponent";
-import DashboardComponent from "./components/DashboardComponent";
-import LearningMaterialsComponent from "./components/LearningMaterialsComponent";
 import SidebarComponent from "./components/SidebarComponent";
+import DashboardComponent from "./components/DashboardComponent";
 import TopNavbarComponent from "./components/TopNavbarComponent";
+import LearningMaterialsComponent from "./components/LearningMaterialsComponent";
+import AddNewProjectComponent from "./components/AddNewProjectComponent";
+import CardComponent from "./components/CardComponent";
+import AssignmentsComponent from "./components/AssignmentsComponent";
 
 function App() {
+
   return (
     <>
-      <div className="font-rubik text-primary-text bg-light-gray flex h-screen overflow-hidden">
-        {/* sidebar */}
-        <div className="w-1/5">
+      <div className="w-full h-screen flex">
+
+        {/* SIDE BAR */}
+        <div className="h-screen w-[20%] ">
           <SidebarComponent />
         </div>
+        <div className="h-screen w-[80%] bg-gray-100 pl-5">
+          {/* TOP NAVBAR */}
+          <div className="w-full p-3">
+            <TopNavbarComponent />
+          </div>
 
-        {/* top navigation bar */}
-        <div className="w-4/5 p-12">
-          <TopNavbarComponent />
+          <div className="flex">
+            <div className="w-[80%] h-[100%]">
+              {/* DASHBOARD CARD */}
+              <div className="w-full h-fit p-3">
+                <DashboardComponent />
+              </div>
 
-          {/* dashboard summary */}
-          <div className="flex justify-between">
-            <div className="w-9/12 mt-5 space-y-5">
-              <DashboardComponent />
-              <AssignmentsComponent />
+
+              <div className="w-full h-[100%] p-3">
+                <div className="flex w-[100%] justify-between">
+                  <AssignmentsComponent/>
+                  <AddNewProjectComponent/>
+                </div>
+
+
+                <div>
+                  <CardComponent />
+                </div>
+
+              </div>
             </div>
 
-            <div className="w-3/12 pl-10 mt-5">
-              <LearningMaterialsComponent />
+            {/* LEARNING MATERIALS */}
+            <div className="h-[100%] w-[25%]">
+              <LearningMaterialsComponent/>
             </div>
           </div>
+
         </div>
       </div>
+
     </>
   );
 }
