@@ -41,7 +41,6 @@ export default function LearningMaterialsComponent() {
       <div className="space-y-2">
         {forSort.map((e) => {
           return (
-            
             <div key={e.id} className="space-y-2 bg-light-gray px-4 py-2 flex gap-5 items-center">
               <img
                 src={e.image}

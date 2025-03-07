@@ -16,9 +16,9 @@ export default function DashboardComponent() {
             key={option.id}
             className={`flex bg-white gap-5 py-2.5 px-4 rounded-xl w-auto`}>
               {option.icon && <img src={option.icon} alt={option.color} className={`w-10 h-10 p-1 rounded-lg text-primary-text self-center ${option.color}`} />}
-            <div>
+            <div className="self-center">
               <p className="text-sm font-semibold">{option.totalTasks}</p>
-              <p className="text-gray-400 text-xs">{option.label}</p>
+              <p className="text-gray-400 text-[12px]">{option.label}</p>
             </div>
           </div>
         ))}

@@ -13,7 +13,7 @@ export default function SidebarComponent() {
           width={40}
           height={40}
         />
-        <h2 className="text-s font-semibold">
+        <h2 className="text-s font-semibold cursor-pointer">
           Korea Software <br /> HRD Center
         </h2>
       </div>
